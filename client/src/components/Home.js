@@ -1,42 +1,45 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ProjectList from './ProjectList';
-
-var clientId;
+import Search from './Search'
 
 class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            clients: {
-                projects: []
-            }
-        }
-        this.getProjects=this.getProjects.bind(this);
+    state = {
+        clients: []
     }
 
     componentDidMount() {
-        this.getProjects();
+        // this.getClients();
+        const clients = axios.get(`/api/clients/`)
+        .then((res) => {
+            console.log(res.data)
+            this.setState({clients: res.data})
+        })
     }
 
-    getProjects () {
-        axios.get(`/api/clients/`)
-            .then((res) => {
-                console.log(res.data)
-                this.setState({clients: res.data})
-        })
+    // getClients () {
+    //     axios.get(`/api/clients/`)
+    //         .then((res) => {
+    //             console.log(res.data)
+    //             this.setState({clients: res.data})
+    //     })
+    // }
+
+    searchClients(query){
+        console.log(query);
+        let clients = this.state.clients.filter((client) => {
+            console.log(client)
+          return client.name.includes(query)
+        });
+        console.log(clients);
+        this.setState({clients: clients})
     }
 
     render() {
-        const projectComponent = this.state.clients.projects.map((project, index) => {
-            return <ProjectList {...project} key={index}/>
-        })
         return (
-            <div>
-                {projectComponent}
-            </div>
+          <div className='container'>
+            <Search searchClients={this.searchClients.bind(this)}/>
+          </div>
         );
+      }
     }
-}
-
 export default Home;
