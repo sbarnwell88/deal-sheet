@@ -4,6 +4,7 @@ import React from 'react';
 class Search extends React.Component {
 
   handleSearch(event) {
+    //   console.log(this.props);
     this.props.searchClients(event.target.value)
   }
 
@@ -12,7 +13,7 @@ class Search extends React.Component {
       <div className="row">
         <div className="input-field">
           <label>Search</label>
-          <input type="text" onChange={this.handleSearch.bind(this)}/>
+          <input type="text" onKeyUp={this.handleSearch.bind(this)}/>
         </div>
       </div>
     )

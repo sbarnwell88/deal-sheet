@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Search from './Search'
+import ClientList from './ClientList'
 
 class Home extends Component {
     state = {
-        clients: []
+        clients: [],
+        allClients: []
     }
 
     componentDidMount() {
         // this.getClients();
         const clients = axios.get(`/api/clients/`)
         .then((res) => {
-            console.log(res.data)
-            this.setState({clients: res.data})
+            // console.log(res.data)
+            this.setState({clients: res.data, allClients: res.data})
         })
     }
 
@@ -26,11 +28,11 @@ class Home extends Component {
 
     searchClients(query){
         console.log(query);
-        let clients = this.state.clients.filter((client) => {
-            console.log(client)
+        let clients = this.state.allClients.filter((client) => {
+            // console.log(client)
           return client.name.includes(query)
         });
-        console.log(clients);
+        // console.log(clients);
         this.setState({clients: clients})
     }
 
@@ -38,6 +40,7 @@ class Home extends Component {
         return (
           <div className='container'>
             <Search searchClients={this.searchClients.bind(this)}/>
+            <ClientList clients={this.state.clients}/>
           </div>
         );
       }
